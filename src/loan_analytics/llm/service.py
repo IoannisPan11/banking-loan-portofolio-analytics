@@ -171,8 +171,10 @@ class AnalyticsAssistant:
 def create_assistant_from_env(env=None) -> AnalyticsAssistant:
     """Wire the real Databricks repository and Azure OpenAI model from environment variables."""
     from .repository import DatabricksGoldRepository
-    from .settings import AzureOpenAISettings, GoldSettings, build_azure_chat_model
+    from .settings import AzureOpenAISettings, GoldSettings, build_azure_chat_model, load_local_env
 
+    if env is None:
+        load_local_env()
     repo = DatabricksGoldRepository(GoldSettings.from_env(env))
     model = build_azure_chat_model(AzureOpenAISettings.from_env(env))
     return AnalyticsAssistant(model, ToolRegistry(repo))

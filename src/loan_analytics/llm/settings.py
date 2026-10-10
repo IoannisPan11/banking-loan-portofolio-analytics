@@ -3,11 +3,15 @@
 Gold data access (Databricks SQL warehouse, via the Databricks SDK):
     DATABRICKS_WAREHOUSE_ID   required - no default
     DATABRICKS_CATALOG        default ``data2026acc123456`` (pipelines/README.md)
-    DATABRICKS_SCHEMA         default ``loans``             (pipelines/README.md)
+    DATABRICKS_SCHEMA         default ``team2``             (the team's Gold schema; same default as api/settings.py)
     DATABRICKS_HOST / DATABRICKS_TOKEN (or a profile) are read by the Databricks SDK itself.
 
 Azure OpenAI chat model - all four are required, none has a default:
-    AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_API_KEY, AZURE_OPENAI_DEPLOYMENT, AZURE_OPENAI_API_VERSION
+    AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_API_KEY, AZURE_OPENAI_API_VERSION and the deployment name, given as
+    AZURE_OPENAI_DEPLOYMENT (preferred) or AZURE_OPENAI_DEPLOYMENT_NAME (accepted alias).
+
+For local development ``load_local_env()`` reads the repository-root ``.env`` (git-ignored). Variables that are
+already set in the process environment always win over the file.
 """
 from __future__ import annotations
 
@@ -15,13 +19,28 @@ import os
 import re
 from collections.abc import Mapping
 from dataclasses import dataclass
+from pathlib import Path
 
 from .errors import ConfigError
 
 _IDENTIFIER = re.compile(r"^[A-Za-z_][A-Za-z0-9_]{0,127}$")
 
 DEFAULT_CATALOG = "data2026acc123456"
-DEFAULT_SCHEMA = "loans"
+DEFAULT_SCHEMA = "team2"
+
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+
+
+def load_local_env(path: Path | None = None) -> bool:
+    """Load the repo-root ``.env`` into ``os.environ`` without overriding existing variables.
+
+    Returns True if a file was found. Values are never logged or returned.
+    """
+    from dotenv import load_dotenv
+
+    env_file = path or REPO_ROOT / ".env"
+    return bool(env_file.is_file() and load_dotenv(env_file, override=False))
 
 
 def _required(env: Mapping[str, str], name: str) -> str:
@@ -55,6 +74,13 @@ class GoldSettings:
         )
 
 
+def _deployment(env: Mapping[str, str]) -> str:
+    for name in ("AZURE_OPENAI_DEPLOYMENT", "AZURE_OPENAI_DEPLOYMENT_NAME"):
+        if (env.get(name) or "").strip():
+            return env[name].strip()
+    raise ConfigError("Required environment variable AZURE_OPENAI_DEPLOYMENT (or AZURE_OPENAI_DEPLOYMENT_NAME) is not set.")
+
+
 @dataclass(frozen=True)
 class AzureOpenAISettings:
     endpoint: str
@@ -71,7 +97,7 @@ class AzureOpenAISettings:
         return cls(
             endpoint=_required(env, "AZURE_OPENAI_ENDPOINT"),
             api_key=_required(env, "AZURE_OPENAI_API_KEY"),
-            deployment=_required(env, "AZURE_OPENAI_DEPLOYMENT"),
+            deployment=_deployment(env),
             api_version=_required(env, "AZURE_OPENAI_API_VERSION"),
         )
 

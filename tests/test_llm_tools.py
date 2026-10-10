@@ -244,7 +244,7 @@ def test_repository_converts_types_and_binds_parameters():
     rows = repo.execute(q)
     assert rows == [{"applications": 29000, "rate": 0.4419, "name": "x"}, {"applications": None, "rate": None, "name": None}]
     kw = client.calls[0]
-    assert kw["warehouse_id"] == "wh123" and kw["catalog"] == "data2026acc123456" and kw["schema"] == "loans"
+    assert kw["warehouse_id"] == "wh123" and kw["catalog"] == "data2026acc123456" and kw["schema"] == "team2"
     assert [(p.name, p.value, p.type) for p in kw["parameters"]] == [("region", "Attica", "STRING")]
     assert "Attica" not in kw["statement"] and kw["row_limit"] == 5
 
@@ -270,7 +270,7 @@ def test_settings_require_a_warehouse_and_validate_identifiers():
     with pytest.raises(ConfigError, match="DATABRICKS_WAREHOUSE_ID"):
         GoldSettings.from_env({})
     s = GoldSettings.from_env({"DATABRICKS_WAREHOUSE_ID": "abc123"})
-    assert (s.catalog, s.schema) == ("data2026acc123456", "loans")
+    assert (s.catalog, s.schema) == ("data2026acc123456", "team2")
     with pytest.raises(ConfigError):
         GoldSettings.from_env({"DATABRICKS_WAREHOUSE_ID": "abc", "DATABRICKS_CATALOG": "x; DROP"})
 
