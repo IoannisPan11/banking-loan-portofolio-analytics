@@ -129,8 +129,8 @@ Why each of these choices was made: [docs/project/decisions.md](docs/project/dec
 
 | Member | Role | Area |
 |---|---|---|
-| George Korlos | DevOps & Cloud Engineer | cloud, DevOps, project management |
-| Ioannis Panagiotopoulos | Data Engineer | Power BI; assistant tools, guard, grounding, evaluation |
+| George Korlos | DevOps & Cloud Engineer | Cloud, DevOps, Project Management |
+| Ioannis Panagiotopoulos | Data + AI Engineer | Data generation, Databricks, tools and evaluation |
 | Dimitra Motsakou | AI Engineer | LangGraph assistant, Azure OpenAI, assistant page |
-| Petros Katsikarelis | Data Analytics & API Developer | FastAPI platform, web dashboard, Microsoft sign-in |
+| Petros Katsikarelis | Data Analytics & API Developer | FastAPI platform, web dashboard, Microsoft sign-in, PowerBI |
 | Blerim Zhonga | Full-stack Developer | FastAPI routes, Databricks connection, prod token check, Postman |
