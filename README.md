@@ -127,12 +127,10 @@ Why each of these choices was made: [docs/project/decisions.md](docs/project/dec
 
 ## Team
 
-| Member | Area |
-|---|---|
-| George Korlos | cloud, DevOps, project management |
-| Ioannis Panagiotopoulos | Power BI; assistant tools, guard, grounding, evaluation |
-| Dimitra Motsakou | LangGraph assistant, Azure OpenAI, assistant page |
-| Petros Katsikarelis | FastAPI platform, web dashboard, Microsoft sign-in |
-| Blerim Zhonga | FastAPI routes, Databricks connection, prod token check, Postman |
-
-The Databricks pipeline was built by the whole team.
+| Member | Role | Area |
+|---|---|---|
+| George Korlos | DevOps & Cloud Engineer | Cloud, DevOps, Project Management |
+| Ioannis Panagiotopoulos | Data + AI Engineer | Data generation, Databricks, tools and evaluation |
+| Dimitra Motsakou | AI Engineer | LangGraph assistant, Azure OpenAI, assistant page |
+| Petros Katsikarelis | Data Analytics & API Developer | FastAPI platform, web dashboard, Microsoft sign-in, PowerBI |
+| Blerim Zhonga | Full-stack Developer | FastAPI routes, Databricks connection, prod token check, Postman |
